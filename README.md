@@ -73,7 +73,11 @@ services:
 #      SERVICE_URL: "localhost"
        SERVICE_URL: "192.168.10.11"
 ```   
-
+### SECRET_KEY and ALGORITHM
+SECRET_KEY and ALGORITHM in docker-compose.yml should be modified before running. 
+Both are used in issueing JSON Web Tokens(jwt) for the authorization of users.
+* SECRET_KEY: You can generate your Django secret key [from here](https://djecrety.ir/) or make your own Django secret key.
+* ALGORITHM: You can find more information about algorithms you can use in jwt(pyjwt in this case) [from here.](https://pyjwt.readthedocs.io/en/stable/algorithms.html)
       
 ### Check & Set
 * And Input the generated Token to landing page as below. (http://localhost:8080)
