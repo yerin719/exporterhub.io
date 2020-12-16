@@ -4,8 +4,13 @@ services:
     image: nexclipper/exporterhub:latest
     ports:
       - "8080:3000"
+    environment:
+#      SERVICE_URL: "192.168.10.11"
+      SERVICE_URL: "localhost"
     depends_on:
       - api
+    volumes:
+      - ./dotenv:/data/.env
   maria_db:
     image: mariadb:10.4.17
     command: --default-authentication-plugin=mysql_native_password
@@ -48,5 +53,6 @@ services:
       DB_PORT: "3306"
       SECRET_KEY: "supersecretkey"
       APP_STAT: "server"
+      ALGORITHM: "HS256"
     depends_on:
       - maria_db
