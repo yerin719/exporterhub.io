@@ -6,23 +6,13 @@ import re
 from django.views import View
 from django.http import JsonResponse
 
-from hub.models import Exporter, Release, Token
+from hub.models import Exporter, Release, Token, Category
+from hub.utils import is_admin
 
 api_url = 'https://api.github.com/repos/'
 PATTERN = r"!\[(\w*|\s|\w+( \w+)*)\]\(([^,:!]*|\/[^,:!]*\.\w+|\w*.\w*)\)"
 
-categories={
-                "Database"     : 1,
-                "Hardware"     : 2,
-                "HTTP"         : 3,
-                "Library"      : 4,
-                "Logging"      : 5,
-                "Messaging"    : 6,
-                "Miscellaneous": 7,
-                "Monitoring"   : 8,
-                "Software"     : 9,
-                "Storage"      : 10
-            }
+categories={category.name:category.id for category in Category.objects.all()}
 
 class RepositoryView(View):
     def get_repo(self, repo_url):
@@ -66,6 +56,7 @@ class RepositoryView(View):
 
         return False
 
+    @is_admin
     def post(self, request):
         try:
             data      = json.loads(request.body)
@@ -123,7 +114,10 @@ class RepositoryView(View):
 
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
+        except Exception as e:
+            return JsonResponse({'d':f"{e}"})
 
+    @is_admin
     def delete(self, request):
         try:
             exporter_id = request.GET['exporter_id']
@@ -140,6 +134,7 @@ class RepositoryView(View):
         except KeyError:
             return JsonResponse({'message':'KEY_ERROR'}, status=400)
 
+    @is_admin
     def patch(self, request):
         try:
             exporter_id          = request.GET['exporter_id']

@@ -55,3 +55,13 @@ class Token(models.Model):
 
     class Meta:
         db_table='tokens'
+
+class User(models.Model):
+    name        = models.CharField(max_length=40, unique=True)
+    password    = models.CharField(max_length=200)
+    is_admin    = models.BooleanField(default=False)
+    joined_date = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table='users'
